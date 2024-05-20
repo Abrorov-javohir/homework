@@ -54,6 +54,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
@@ -77,7 +84,6 @@ class _HomePageState extends State<HomePage> {
               keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
                 prefix: Icon(Icons.email),
-                suffix: Icon(Icons.remove_red_eye),
                 labelText: "Email Address",
                 border: OutlineInputBorder(),
                 hintText: "Name@example.com",
@@ -87,10 +93,9 @@ class _HomePageState extends State<HomePage> {
             TextField(
               controller: passwordController,
               obscureText: true,
-              keyboardType: TextInputType.emailAddress,
               decoration: const InputDecoration(
                 prefix: Icon(Icons.key),
-                suffix: Icon(CupertinoIcons.eye_slash_fill),
+                suffix: Icon(Icons.remove_red_eye),
                 labelText: "Password",
                 border: OutlineInputBorder(),
               ),
@@ -261,7 +266,7 @@ class SeventhPage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             const TextField(
-              keyboardType: TextInputType.emailAddress,
+              keyboardType: TextInputType.name,
               decoration: InputDecoration(
                 prefix: Icon(Icons.person),
                 labelText: "Your name",
@@ -270,7 +275,6 @@ class SeventhPage extends StatelessWidget {
             ),
             const SizedBox(height: 30),
             const TextField(
-              obscureText: true,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 prefix: Icon(Icons.email),
@@ -281,7 +285,6 @@ class SeventhPage extends StatelessWidget {
             const SizedBox(height: 30),
             const TextField(
               obscureText: true,
-              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 prefix: Icon(Icons.key),
                 suffix: Icon(CupertinoIcons.eye_slash_fill),
@@ -292,7 +295,6 @@ class SeventhPage extends StatelessWidget {
             const SizedBox(height: 30),
             const TextField(
               obscureText: true,
-              keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 prefix: Icon(Icons.key),
                 suffix: Icon(CupertinoIcons.eye_slash_fill),
@@ -321,9 +323,38 @@ class SeventhPage extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Tenth()),
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text("Continue"),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Image.asset(
+                              "assets/image.png",
+                            ),
+                            const Text("Your account has been activated"),
+                            const Text(
+                                "Congratulations! You have successfully updated your profile"),
+                          ],
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const Tenth(),
+                                ),
+                              );
+                            },
+                            child: const Text("OK"),
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -339,7 +370,7 @@ class SeventhPage extends StatelessWidget {
               height: 20,
             ),
             const Text(
-              "By continuing, you agree to Enter your account? ",
+              "By continuing, you agree to enter your account",
               style: TextStyle(fontSize: 15, color: Colors.black),
             ),
             const SizedBox(height: 40),
@@ -417,14 +448,12 @@ class _TenthState extends State<Tenth> {
       ),
       body: Column(
         children: [
-          const Row(),
+          const SizedBox(height: 20),
           const Text(
             "Schedule",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           const Text(
             "Let's schedule your activities",
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -435,7 +464,7 @@ class _TenthState extends State<Tenth> {
                 context: context,
                 firstDate: DateTime(1000),
                 lastDate: DateTime(2025),
-                currentDate: DateTime.now(),
+                initialDate: date,
               );
               if (newDate != null) {
                 setState(() {
@@ -457,7 +486,7 @@ class _TenthState extends State<Tenth> {
                 height: 100,
                 child: TextButton(
                   onPressed: () {},
-                  child: Text(
+                  child: const Text(
                     "All",
                     style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
@@ -469,7 +498,7 @@ class _TenthState extends State<Tenth> {
                 height: 100,
                 child: TextButton(
                   onPressed: () {},
-                  child: Text(
+                  child: const Text(
                     "New",
                     style: TextStyle(fontSize: 20, color: Colors.black),
                   ),
@@ -477,9 +506,7 @@ class _TenthState extends State<Tenth> {
               ),
             ],
           ),
-          SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           Row(
             children: [
               TextButton(
@@ -488,7 +515,7 @@ class _TenthState extends State<Tenth> {
                     context: context,
                     firstDate: DateTime(1000),
                     lastDate: DateTime(2025),
-                    currentDate: DateTime.now(),
+                    initialDate: date,
                   );
                   if (newDate != null) {
                     setState(() {
@@ -501,17 +528,15 @@ class _TenthState extends State<Tenth> {
                   style: const TextStyle(fontSize: 20, color: Colors.black),
                 ),
               ),
-              Icon(Icons.punch_clock_outlined),
-              Text("10.00 AM - 01.00 PM")
+              const Icon(Icons.punch_clock_outlined),
+              const Text("10.00 AM - 01.00 PM")
             ],
           ),
-          Text(
+          const Text(
             "Development of software for the protection of information resources",
             textAlign: TextAlign.center,
           ),
-          SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 20),
           Row(
             children: [
               TextButton(
@@ -520,7 +545,7 @@ class _TenthState extends State<Tenth> {
                     context: context,
                     firstDate: DateTime(1000),
                     lastDate: DateTime(2025),
-                    currentDate: DateTime.now(),
+                    initialDate: date,
                   );
                   if (newDate != null) {
                     setState(() {
@@ -533,11 +558,11 @@ class _TenthState extends State<Tenth> {
                   style: const TextStyle(fontSize: 20, color: Colors.black),
                 ),
               ),
-              Icon(Icons.punch_clock_outlined),
-              Text("10.00 AM - 01.00 PM")
+              const Icon(Icons.punch_clock_outlined),
+              const Text("10.00 AM - 01.00 PM")
             ],
           ),
-          Text(
+          const Text(
             "Development of software for the protection of information resources",
             textAlign: TextAlign.center,
           ),
@@ -567,7 +592,10 @@ class _TenthState extends State<Tenth> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
       ),
-      floatingActionButton: Icon(Icons.add),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
     );
   }
 
@@ -597,6 +625,6 @@ const List<String> months = [
 
 extension Dateformat on DateTime {
   String format() {
-    return "$day ${months[month - 1]} ${year}";
+    return "$day ${months[month - 1]} $year";
   }
 }
